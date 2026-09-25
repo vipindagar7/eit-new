@@ -14,12 +14,6 @@ interface CursorState {
 const INTERACTIVE = "[data-cursor], a, button, [role='button'], summary, label";
 const TEXT_FIELDS = "input, textarea, select, [contenteditable='true']";
 
-/**
- * EIT cursor for mouse users: a small dot that follows the pointer exactly, and a ring that trails it.
- * The ring grows over links and buttons, and shows a word ("Drag", "View") over anything marked `data-cursor="Word"`.
- * Purely decorative: it never captures the pointer, is hidden over text fields (which keep the normal I-beam),
- * and does not exist on touch screens or for visitors who ask for reduced motion.
- */
 export function CustomCursor() {
   const fine = useMediaQuery("(hover: hover) and (pointer: fine)");
   const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
@@ -80,20 +74,23 @@ export function CustomCursor() {
   const labelled = state.label !== "";
   const scale = state.down ? 0.8 : labelled ? 2.1 : state.hover ? 1.6 : 1;
 
+  // A white ring just outside a navy one reads on light and dark surfaces alike, and against a
+  // photograph the pair still frames the shape instead of dissolving into a single mid-tone.
+  const halo = "0 0 0 1.5px rgba(255,255,255,0.95), 0 0 0 3px rgba(23,50,77,0.45), 0 2px 10px rgba(23,50,77,0.35)";
+
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
       <motion.div className="absolute top-0 left-0" style={{ x: ringX, y: ringY }}>
         <motion.div
-          className="-mt-5 -ml-5 grid size-10 place-items-center rounded-full border-[1.5px]"
+          className="-mt-5 -ml-5 grid size-10 place-items-center rounded-full border-[1.5px] border-white"
           initial={false}
           animate={{
             scale,
             opacity: state.hidden ? 0 : 1,
-            backgroundColor: labelled ? "rgba(82, 188, 189, 0.95)" : state.hover ? "rgba(82, 188, 189, 0.22)" : "rgba(255, 255, 255, 0)",
-            borderColor: labelled ? "rgba(82, 188, 189, 1)" : "rgba(255, 255, 255, 0.95)",
+            backgroundColor: labelled ? "rgba(82, 188, 189, 0.95)" : state.hover ? "rgba(82, 188, 189, 0.3)" : "rgba(23, 50, 77, 0.08)",
           }}
           transition={{ type: "spring", stiffness: 380, damping: 26 }}
-          style={{ mixBlendMode: labelled ? "normal" : "difference" }}
+          style={{ boxShadow: halo }}
         >
           {labelled && <span className="text-[0.5rem] leading-none font-bold text-primary">{state.label}</span>}
         </motion.div>
@@ -101,10 +98,10 @@ export function CustomCursor() {
 
       <motion.div className="absolute top-0 left-0" style={{ x, y }}>
         <motion.span
-          className="-mt-[3px] -ml-[3px] block size-1.5 rounded-full bg-white"
+          className="-mt-[4px] -ml-[4px] block size-2 rounded-full bg-eit-accent"
           initial={false}
           animate={{ opacity: state.hidden || labelled ? 0 : 1, scale: state.hover ? 0.4 : 1 }}
-          style={{ mixBlendMode: "difference" }}
+          style={{ boxShadow: "0 0 0 1.5px rgba(255,255,255,0.95), 0 1px 4px rgba(23,50,77,0.4)" }}
         />
       </motion.div>
     </div>
