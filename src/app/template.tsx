@@ -10,10 +10,22 @@ import { usePathname } from "next/navigation";
  * `layout.tsx`) remounts on every navigation, so this runs once per route while the header, footer
  * and custom cursor in the root layout stay put. Entrance-only — there is no exit animation and
  * nothing waits on it, so navigation never feels delayed. Skipped entirely for reduced motion.
+ *
+ * The homepage is excluded. HomeIntro pins its hero scene with GSAP ScrollTrigger (`pin: true`) and
+ * measures element positions with getBoundingClientRect() the moment it mounts, to run the
+ * photo-into-slanted-panels scroll morph. Any transform on an ancestor — even a Framer Motion one
+ * that settles back to rotateY(0) — changes the containing block those measurements are taken
+ * against, so the morph read the wrong geometry and rendered as exploded, frozen panels. The
+ * homepage already has its own signature scroll animation; every other route (none of them pin
+ * anything — see grep "pin:" across src/) gets the page-turn instead.
  */
 export default function Template({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const reduce = useReducedMotion();
+
+  if (pathname === "/") {
+    return <div className="flex flex-1 flex-col">{children}</div>;
+  }
 
   return (
     <motion.div
