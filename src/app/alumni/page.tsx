@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ScrollAnimator } from "@/components/animations/ScrollAnimator";
 import { CelebrityGrid } from "@/components/pages/CelebrityGrid";
-import { FannedCards } from "@/components/pages/FannedCards";
+import { FannedCarousel } from "@/components/pages/FannedCarousel";
 import { PageHero } from "@/components/pages/PageHero";
 import { PageSection } from "@/components/pages/PageSection";
 import { QuickLinksGrid } from "@/components/pages/QuickLinksGrid";
@@ -30,7 +30,10 @@ export default function Page() {
       <PageSection name="default" bg="parchment" eyebrow="Alumni" title={["Where they", "are now"]}>
         {alumni.length > 0 ? (
           <>
-            <FannedCards items={alumni.slice(0, 8).map((person) => ({ id: person.id, name: person.name, photo: person.photo, accent: person.accent }))} className="mb-4" />
+            <FannedCarousel
+              items={alumni.map((person) => ({ id: person.id, name: person.name, subtitle: person.role, photo: person.photo, accent: person.accent }))}
+              className="mb-8"
+            />
             <CelebrityGrid people={alumni} />
           </>
         ) : (

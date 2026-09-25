@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { ScrollAnimator } from "@/components/animations/ScrollAnimator";
 import { Marquee } from "@/components/home/Marquee";
 import { SmartImage, initials } from "@/components/home/SmartImage";
-import { FannedCards } from "@/components/pages/FannedCards";
+import { FannedCarousel } from "@/components/pages/FannedCarousel";
 import { PageHero } from "@/components/pages/PageHero";
 import { PageSection } from "@/components/pages/PageSection";
 import { QuickLinksGrid, type QuickLink } from "@/components/pages/QuickLinksGrid";
@@ -62,7 +62,10 @@ export default function Page() {
 
       {stories.length > 0 && (
         <PageSection name="default" bg="parchment" eyebrow="Success stories" title={["Careers that", "started here"]}>
-          <FannedCards items={stories.slice(0, 8).map((story) => ({ id: story.id, name: story.name, photo: story.photo, accent: story.accent }))} className="mb-4" />
+          <FannedCarousel
+            items={stories.map((story) => ({ id: story.id, name: story.name, subtitle: [story.role, story.company].filter(Boolean).join(" · "), photo: story.photo, accent: story.accent }))}
+            className="mb-8"
+          />
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {stories.map((story) => (
               <li key={story.id} data-anim="card" className="flex flex-col gap-4 rounded-2xl border border-primary/10 bg-eit-surface p-6">

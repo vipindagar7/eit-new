@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SkipToContent } from "@/components/layout/SkipToContent";
 import { SocialLinks } from "@/components/layout/SocialLinks";
 import { CustomCursor } from "@/components/layout/CustomCursor";
+import { PageCurlTransition } from "@/components/layout/PageCurlTransition";
 import { siteConfig } from "@/data/site/site";
 import { ALLOW_INDEXING, BRAND_COLOR, DEFAULT_TITLE, SITE_URL, TITLE_TEMPLATE } from "@/lib/constants";
 import { getSocialLinks } from "@/lib/content";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
         <SkipToContent />
         <CustomCursor />
+        <PageCurlTransition />
         <SiteHeader />
         <SocialLinks links={getSocialLinks()} variant="rail" />
         <main id="main-content" className="flex flex-1 flex-col">
