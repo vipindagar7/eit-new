@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ScrollAnimator } from "@/components/animations/ScrollAnimator";
 import { CelebrityGrid } from "@/components/pages/CelebrityGrid";
+import { FannedCards } from "@/components/pages/FannedCards";
 import { PageHero } from "@/components/pages/PageHero";
 import { PageSection } from "@/components/pages/PageSection";
 import { QuickLinksGrid } from "@/components/pages/QuickLinksGrid";
@@ -26,9 +27,12 @@ export default function Page() {
         tone="lilac"
       />
 
-      <PageSection name="default" eyebrow="Alumni" title={["Where they", "are now"]}>
+      <PageSection name="default" bg="parchment" eyebrow="Alumni" title={["Where they", "are now"]}>
         {alumni.length > 0 ? (
-          <CelebrityGrid people={alumni} />
+          <>
+            <FannedCards items={alumni.slice(0, 8).map((person) => ({ id: person.id, name: person.name, photo: person.photo, accent: person.accent }))} className="mb-4" />
+            <CelebrityGrid people={alumni} />
+          </>
         ) : (
           <SectionNote title="The alumni directory is being built">
             Notable graduates and their stories will appear here as they are added to Celebrity Corner. In the

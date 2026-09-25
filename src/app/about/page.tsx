@@ -1,5 +1,6 @@
 import { ScrollAnimator } from "@/components/animations/ScrollAnimator";
 import { SmartImage, initials } from "@/components/home/SmartImage";
+import { FannedCards } from "@/components/pages/FannedCards";
 import { PageHero } from "@/components/pages/PageHero";
 import { PageSection } from "@/components/pages/PageSection";
 import { QuickLinksGrid, type QuickLink } from "@/components/pages/QuickLinksGrid";
@@ -28,7 +29,8 @@ export default function Page() {
       />
 
       {leadership.length > 0 && (
-        <PageSection name="default" eyebrow="Leadership" title={["A message from", "our leadership"]}>
+        <PageSection name="default" bg="parchment" eyebrow="Leadership" title={["A message from", "our leadership"]}>
+          <FannedCards items={leadership.map((person) => ({ id: person.id, name: person.name, photo: person.photo, accent: "#CFE7EC" }))} className="mb-4" />
           <div className="grid gap-10 lg:grid-cols-2">
             {leadership.map((person) => (
               <div key={person.id} data-anim="card" className="flex flex-col gap-5 rounded-2xl border border-primary/10 bg-eit-surface p-7 sm:flex-row sm:items-start">

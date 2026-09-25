@@ -29,6 +29,14 @@
   --eit-rose: #e79bb2;
   --eit-sand: #e4d3bc;
 
+  /* Parchment: a warm sand wash for inner-page backgrounds, paired with a faint architectural
+     sketch layer (see BlueprintTexture). Distinct from --eit-sand above, which is a pastel accent
+     for small chips and never a large fill — parchment is the fill itself. */
+  --eit-parchment: #f6efe0;
+  --eit-parchment-deep: #ead9b8;
+  /* Ink used at low opacity for the blueprint sketch strokes, always mixed down via rgba/opacity. */
+  --eit-ink-line: 23, 50, 77;
+
   /* Semantic tokens (shadcn/ui contract) */
   --background: var(--eit-white);
   --foreground: var(--eit-navy);
@@ -103,6 +111,8 @@
   --color-eit-peach: var(--eit-peach);
   --color-eit-rose: var(--eit-rose);
   --color-eit-sand: var(--eit-sand);
+  --color-eit-parchment: var(--eit-parchment);
+  --color-eit-parchment-deep: var(--eit-parchment-deep);
 
   /* Radii stay small: this is an institution, not an app. */
   --radius-sm: calc(var(--radius) - 2px);

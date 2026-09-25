@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { SectionHeading } from "@/components/home/SectionHeading";
 import { Container } from "@/components/layout/Container";
+import { BlueprintTexture } from "@/components/decor/BlueprintTexture";
 import { cn } from "@/lib/utils";
 
 const backgrounds = {
@@ -9,6 +10,8 @@ const backgrounds = {
   mist: "bg-[#EDF6F1] text-primary",
   sage: "bg-[#F1F5EC] text-primary",
   navy: "bg-primary text-white",
+  /** The warm sand wash with a faint architectural sketch layer — used for the deeper "featured" sections. */
+  parchment: "bg-eit-parchment text-primary",
 } as const;
 
 interface PageSectionProps {
@@ -34,8 +37,9 @@ interface PageSectionProps {
 export function PageSection({ name, bg = "white", eyebrow, title, description, aside, className, containerClassName, children }: PageSectionProps) {
   const dark = bg === "navy";
   return (
-    <section data-scroll-section={name} className={cn("overflow-x-clip py-16 lg:py-24", backgrounds[bg], className)}>
-      <Container className={containerClassName}>
+    <section data-scroll-section={name} className={cn("relative overflow-x-clip py-16 lg:py-24", backgrounds[bg], className)}>
+      {bg === "parchment" && <BlueprintTexture variant="panel" />}
+      <Container className={cn("relative", containerClassName)}>
         {(eyebrow || title) && (
           <div className={cn("flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between", (children || aside) && "mb-12 lg:mb-16")}>
             <SectionHeading eyebrow={eyebrow ?? ""} title={title ?? []} description={description} tone={dark ? "dark" : "light"} className="max-w-2xl" />

@@ -6,18 +6,19 @@ import { BrandMark } from "@/components/layout/BrandMark";
 import { Container } from "@/components/layout/Container";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { TextReveal } from "@/components/animations/TextReveal";
+import { BlueprintTexture } from "@/components/decor/BlueprintTexture";
 import type { CallToAction } from "@/types";
 import { cn } from "@/lib/utils";
 
 const tones = {
-  mist: "from-eit-mist/60",
-  sage: "from-eit-sage/60",
-  peach: "from-eit-peach/50",
-  lilac: "from-eit-lilac/40",
-  blush: "from-eit-blush/45",
-  sand: "from-eit-sand/50",
-  butter: "from-eit-butter/45",
-  rose: "from-eit-rose/40",
+  mist: "from-eit-mist/50",
+  sage: "from-eit-sage/50",
+  peach: "from-eit-peach/40",
+  lilac: "from-eit-lilac/35",
+  blush: "from-eit-blush/40",
+  sand: "from-eit-sand/45",
+  butter: "from-eit-butter/40",
+  rose: "from-eit-rose/35",
 } as const;
 
 interface PageHeroProps {
@@ -40,7 +41,8 @@ interface PageHeroProps {
  */
 export function PageHero({ path, eyebrow, title, description, primaryAction, secondaryAction, tone = "mist", children }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-eit-surface pt-10 pb-24 sm:pt-14 sm:pb-28 lg:pb-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-eit-parchment via-eit-parchment to-eit-surface pt-10 pb-24 sm:pt-14 sm:pb-28 lg:pb-32">
+      <BlueprintTexture variant="hero" />
       <div aria-hidden className={cn("pointer-events-none absolute inset-x-0 top-0 h-[26rem] bg-gradient-to-b to-transparent", tones[tone])} />
       <Container className="relative">
         <FadeIn standalone y={10}>
