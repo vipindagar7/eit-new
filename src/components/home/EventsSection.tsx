@@ -68,7 +68,15 @@ export function EventsSection({ events, notices }: { events: EventView[]; notice
               </div>
 
               <div className="relative flex min-h-[21rem] flex-col justify-between gap-8 sm:max-w-[58%]" aria-live={eventState.running ? "off" : "polite"}>
-                <AnimatePresence mode="wait" initial={false}>
+                {/* mode="wait" previously held the OUTGOING event on screen for its full ~450ms exit
+                    animation before mounting the next one, while the date-tab buttons below (driven
+                    straight off eventState.index, with no such delay) already showed the new date as
+                    active the instant it was clicked. For that whole window the "active" tab and the
+                    visible day/title genuinely disagreed (usability audit #32/#33 — e.g. "26 Oct" marked
+                    active while the card still read "12 Oct"). popLayout removes the outgoing card from
+                    the layout immediately so the incoming one mounts and starts fading in on the same
+                    render as the state change, keeping the active tab and the visible content in sync. */}
+                <AnimatePresence mode="popLayout" initial={false}>
                   <motion.div
                     key={current.id}
                     initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
@@ -143,17 +151,7 @@ export function EventsSection({ events, notices }: { events: EventView[]; notice
               data-anim="panel-right"
               className="flex flex-col rounded-[2rem] bg-eit-peach/40 p-7 text-primary sm:p-9"
             >
-              <div className="flex items-center justify-between gap-4">
-                <h3 className="text-xl font-bold tracking-tight">Notice board</h3>
-                <CarouselControls
-                  label="notice"
-                  onPrev={noticeState.prev}
-                  onNext={noticeState.next}
-                  onTogglePause={noticeState.togglePause}
-                  userPaused={noticeState.userPaused}
-                  timed={noticeState.timed}
-                />
-              </div>
+              <h3 className="text-xl font-bold tracking-tight">Notice board</h3>
 
               <ol className="relative mt-6 flex-1" aria-live={noticeState.running ? "off" : "polite"}>
                 <AnimatePresence initial={false} mode="popLayout">
@@ -181,10 +179,23 @@ export function EventsSection({ events, notices }: { events: EventView[]; notice
                 </AnimatePresence>
               </ol>
 
-              <Link href={noticesAction.href} className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary underline decoration-eit-accent decoration-2 underline-offset-4">
-                {noticesAction.label}
-                <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              {/* Playback controls now sit at the bottom of every carousel on this page — here, beside
+                  the board's own action link — instead of top-right here but bottom-left on the events
+                  panel next to it (usability audit #34/#36 flagged that inconsistency). */}
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                <Link href={noticesAction.href} className="group inline-flex items-center gap-2 text-sm font-semibold text-primary underline decoration-eit-accent decoration-2 underline-offset-4">
+                  {noticesAction.label}
+                  <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <CarouselControls
+                  label="notice"
+                  onPrev={noticeState.prev}
+                  onNext={noticeState.next}
+                  onTogglePause={noticeState.togglePause}
+                  userPaused={noticeState.userPaused}
+                  timed={noticeState.timed}
+                />
+              </div>
             </div>
           )}
         </div>

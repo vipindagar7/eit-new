@@ -3,7 +3,7 @@
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/Container";
-import { heroTimeThemes, type HeroSlide } from "@/data/home/hero";
+import type { HeroSlide } from "@/data/home/hero";
 import { cn } from "@/lib/utils";
 
 interface HeroControlsProps {
@@ -120,7 +120,7 @@ export function HeroControls({
                       type="button"
                       onClick={() => onSelect(index)}
                       aria-current={isActive ? "true" : undefined}
-                      aria-label={`Go to slide ${index + 1}: ${heroTimeThemes[slide.timeTheme].name}`}
+                      aria-label={`Go to slide ${index + 1}: ${slide.label}`}
                       className="group block w-full py-2 text-left"
                     >
                       <span className="block h-0.5 overflow-hidden rounded-full bg-white/30 group-hover:bg-white/45">
@@ -137,13 +137,16 @@ export function HeroControls({
                           onAnimationEnd={isActive && timed ? onNext : undefined}
                         />
                       </span>
+                      {/* Same label vocabulary as the left-hand slide index (see usability audit #20/#28):
+                          both controls now name the same slide the same way, so this reads as one
+                          navigation shown two ways rather than a second, independent "time of day" axis. */}
                       <span
                         className={cn(
                           "mt-2 hidden text-xs font-medium text-white md:block",
                           isActive ? "opacity-100" : "opacity-60 group-hover:opacity-100",
                         )}
                       >
-                        {heroTimeThemes[slide.timeTheme].name}
+                        {slide.label}
                       </span>
                     </button>
                   </li>

@@ -13,13 +13,15 @@ import { SmartImage, initials } from "./SmartImage";
 
 function ClubCard({ club }: { club: ClubView }) {
   return (
-    <article className="mr-4 flex w-72 shrink-0 items-center gap-4 rounded-[1.4rem] p-4 pr-6" style={{ backgroundColor: `${club.accent}66` }}>
+    <article className="mr-4 flex w-72 shrink-0 items-start gap-4 rounded-[1.4rem] p-4 pr-6" style={{ backgroundColor: `${club.accent}66` }}>
       <span className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-white [container-type:inline-size]">
         <SmartImage image={club.logo} accent={club.accent} label={initials(club.name)} sizes="64px" imageClassName="object-contain p-2" />
       </span>
       <span className="min-w-0">
-        <span className="block truncate text-lg font-bold tracking-tight text-primary">{club.name}</span>
-        {club.summary && <span className="mt-0.5 block truncate text-sm text-primary/70">{club.summary}</span>}
+        {/* Full club names (e.g. "Sample Entrepreneurship Club") no longer get clipped mid-word: they wrap
+            onto a second line instead of truncating with an ellipsis (see usability audit #5-16). */}
+        <span className="line-clamp-2 text-lg leading-snug font-bold tracking-tight text-primary">{club.name}</span>
+        {club.summary && <span className="mt-0.5 line-clamp-1 block text-sm text-primary/70">{club.summary}</span>}
       </span>
     </article>
   );

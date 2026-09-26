@@ -17,13 +17,20 @@ import type { Club } from "../clubs/clubs";
 import type { PodcastEpisode } from "../podcasts/episodes";
 import type { PodcastSpeaker } from "../podcasts/speakers";
 import type { CampusMoment } from "../home/campusLife";
-import type { GalleryImage, LeadershipMessage, Testimonial } from "@/types";
+import type { CommitteeMember, GalleryImage, LeadershipMessage, Mou, Testimonial } from "@/types";
 import type { SocialLink } from "../site/social";
 import type { Celebrity } from "../celebrities/celebrities";
 import type { PlacementStep } from "../placements/process";
 import type { PolicySection } from "../placements/policy";
 import type { HighestPerformer } from "../placements/achievements";
 import type { ProfessionalSociety } from "../clubs/societies";
+import type { HistoryMilestone } from "../about/history";
+import type { GoverningBodyMember } from "../about/governance";
+import type { Approval } from "../about/approvals";
+import type { Committee } from "../about/committees";
+import type { DisclosureItem } from "../about/disclosure";
+import type { PlacementActivity } from "../placements/activities";
+import type { ProgramDetail, ProgramSlug } from "../programs/programs";
 
 const note = "Sample entry: replace it by filling the real data file.";
 
@@ -164,3 +171,131 @@ export const sampleSocieties: ProfessionalSociety[] = [
   { id: "sample-society-2", name: "Sample Professional Society Two", summary: "Sample summary line" },
   { id: "sample-society-3", name: "Sample Professional Society Three", summary: "Sample summary line" },
 ];
+
+export const sampleHistory: HistoryMilestone[] = [
+  { id: "sample-history-2007", year: "2007", title: "Sample milestone: institute founded", description: note },
+  { id: "sample-history-2012", year: "2012", title: "Sample milestone: new program launched", description: note },
+  { id: "sample-history-2017", year: "2017", title: "Sample milestone: accreditation received", description: note },
+  { id: "sample-history-2021", year: "2021", title: "Sample milestone: campus expansion", description: note },
+  { id: "sample-history-2025", year: "2025", title: "Sample milestone: recent achievement", description: note },
+];
+
+export const sampleGoverningBody: GoverningBodyMember[] = [
+  { id: "sample-gb-1", name: "Sample Member One", role: "Sample role, Chairperson" },
+  { id: "sample-gb-2", name: "Sample Member Two", role: "Sample role, Member" },
+  { id: "sample-gb-3", name: "Sample Member Three", role: "Sample role, Member" },
+  { id: "sample-gb-4", name: "Sample Member Four", role: "Sample role, Member Secretary" },
+];
+
+export const sampleApprovals: Approval[] = [
+  { id: "sample-approval-1", authority: "Sample Authority (e.g. AICTE)", title: "Sample Approval Title", academicYear: "2025-26" },
+  { id: "sample-approval-2", authority: "Sample Authority (e.g. GGSIPU)", title: "Sample Affiliation Title", academicYear: "2025-26" },
+];
+
+const sampleMembers: CommitteeMember[] = [
+  { name: "Sample Member One", role: "Chairperson" },
+  { name: "Sample Member Two", role: "Member" },
+  { name: "Sample Member Three", role: "Member" },
+];
+
+export const sampleCommittees: Committee[] = [
+  { slug: "iqac", name: "Internal Quality Assurance Cell", description: note, members: sampleMembers },
+  { slug: "grievance-redressal", name: "Grievance Redressal Committee", description: note, members: sampleMembers },
+  { slug: "internal-committee-women-cell", name: "Internal Committee and Women Cell", description: note, members: sampleMembers },
+  { slug: "sc-st-cell", name: "SC/ST Cell", description: note, members: sampleMembers },
+  { slug: "nba-naac", name: "NBA and NAAC Policy Committee", description: note, members: sampleMembers },
+];
+
+export const sampleMandatoryDisclosure: DisclosureItem[] = [
+  { id: "sample-disclosure-1", title: "Sample disclosure item one" },
+  { id: "sample-disclosure-2", title: "Sample disclosure item two" },
+  { id: "sample-disclosure-3", title: "Sample disclosure item three" },
+];
+
+export const samplePlacementMessages: LeadershipMessage[] = [
+  { id: "sample-hod-tp", name: "Sample HoD, Training & Placement", designation: "HoD, Training & Placement", message: [note] },
+];
+
+export const sampleStudentsSpeak: Testimonial[] = [
+  { id: "sample-student-speak-1", name: "Sample Student One", designation: "Placed, Sample Company", batch: "B.Tech, Sample year", quote: note },
+  { id: "sample-student-speak-2", name: "Sample Student Two", designation: "Placed, Sample Company", batch: "MBA, Sample year", quote: note },
+  { id: "sample-student-speak-3", name: "Sample Student Three", designation: "Placed, Sample Company", batch: "BCA, Sample year", quote: note },
+];
+
+export const sampleRecruitersSpeak: Testimonial[] = [
+  { id: "sample-recruiter-speak-1", name: "Sample Recruiter Contact One", designation: "Sample designation", organisation: "Sample Company", quote: note },
+  { id: "sample-recruiter-speak-2", name: "Sample Recruiter Contact Two", designation: "Sample designation", organisation: "Sample Company", quote: note },
+  { id: "sample-recruiter-speak-3", name: "Sample Recruiter Contact Three", designation: "Sample designation", organisation: "Sample Company", quote: note },
+];
+
+export const samplePlacementMous: Mou[] = [
+  { id: "sample-mou-1", organisation: "Sample Company One", purpose: note, signedOn: "2025" },
+  { id: "sample-mou-2", organisation: "Sample Company Two", purpose: note, signedOn: "2025" },
+  { id: "sample-mou-3", organisation: "Sample Company Three", purpose: note, signedOn: "2024" },
+];
+
+export const samplePlacementActivities: PlacementActivity[] = (
+  [
+    ["industrial-visit", "Industrial Visit"],
+    ["expert-lecture", "Expert Lecture"],
+    ["hr-conclave", "HR Conclave"],
+    ["job-fair", "Job Fair"],
+    ["skill-development", "Skill Development Session"],
+  ] as const
+).flatMap(([kind, label], groupIndex) =>
+  Array.from({ length: 2 }, (_, index) => ({
+    id: `sample-${kind}-${index + 1}`,
+    kind,
+    title: `Sample ${label} ${index + 1}`,
+    date: `2025-${String(9 - groupIndex).padStart(2, "0")}-${String(10 + index).padStart(2, "0")}`,
+    description: note,
+  })),
+);
+
+/** Extra fields for the program detail pages — the base name/tagline/image etc. already come from programs.ts. */
+type ProgramSampleDetail = Pick<ProgramDetail, "duration" | "summary" | "eligibility" | "specialisations" | "careerPaths">;
+
+export const sampleProgramDetails: Record<ProgramSlug, ProgramSampleDetail> = {
+  btech: {
+    duration: "Sample: 4 years (8 semesters)",
+    summary: note,
+    eligibility: ["Sample eligibility line one", "Sample eligibility line two"],
+    specialisations: ["Sample specialisation One", "Sample specialisation Two", "Sample specialisation Three"],
+    careerPaths: ["Sample career path One", "Sample career path Two"],
+  },
+  mtech: {
+    duration: "Sample: 2 years (4 semesters)",
+    summary: note,
+    eligibility: ["Sample eligibility line one"],
+    specialisations: ["Sample specialisation One", "Sample specialisation Two"],
+    careerPaths: ["Sample career path One", "Sample career path Two"],
+  },
+  bca: {
+    duration: "Sample: 3 years (6 semesters)",
+    summary: note,
+    eligibility: ["Sample eligibility line one"],
+    specialisations: ["Sample specialisation One"],
+    careerPaths: ["Sample career path One", "Sample career path Two"],
+  },
+  mca: {
+    duration: "Sample: 2 years (4 semesters)",
+    summary: note,
+    eligibility: ["Sample eligibility line one"],
+    specialisations: ["Sample specialisation One"],
+    careerPaths: ["Sample career path One", "Sample career path Two"],
+  },
+  bba: {
+    duration: "Sample: 3 years (6 semesters)",
+    summary: note,
+    eligibility: ["Sample eligibility line one"],
+    specialisations: ["Sample specialisation One", "Sample specialisation Two"],
+    careerPaths: ["Sample career path One", "Sample career path Two"],
+  },
+  mba: {
+    duration: "Sample: 2 years (4 semesters)",
+    summary: note,
+    eligibility: ["Sample eligibility line one"],
+    specialisations: ["Sample specialisation One", "Sample specialisation Two"],
+    careerPaths: ["Sample career path One", "Sample career path Two"],
+  },
+};

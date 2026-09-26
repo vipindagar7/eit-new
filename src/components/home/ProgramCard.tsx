@@ -22,11 +22,14 @@ interface Pose {
  * 1 and 2 fan out to the right, anything further waits invisibly (so wrapping never flies across the stage).
  * Side cards share one gentle tilt, like the design reference.
  */
+// -1's title ("MBA" etc.) was reported as significantly obscured behind the active card (usability
+// audit #30). Easing its offset out from -66% to -58% keeps the fanned-card look but uncovers most of
+// its heading; nudging 1 and 2 outward by the same amount keeps the fan visually balanced.
 const poses: Record<number, Pose> = {
-  [-1]: { x: "-66%", scale: 0.8, rotateY: 10, opacity: 1, z: 20 },
+  [-1]: { x: "-58%", scale: 0.8, rotateY: 10, opacity: 1, z: 20 },
   0: { x: "0%", scale: 1, rotateY: 0, opacity: 1, z: 30 },
-  1: { x: "76%", scale: 0.8, rotateY: 10, opacity: 1, z: 20 },
-  2: { x: "130%", scale: 0.7, rotateY: 10, opacity: 1, z: 10 },
+  1: { x: "82%", scale: 0.8, rotateY: 10, opacity: 1, z: 20 },
+  2: { x: "136%", scale: 0.7, rotateY: 10, opacity: 1, z: 10 },
 };
 const hiddenRight: Pose = { x: "180%", scale: 0.6, rotateY: 10, opacity: 0, z: 0 };
 

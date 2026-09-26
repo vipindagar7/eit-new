@@ -7,6 +7,7 @@ import { Container } from "@/components/layout/Container";
 import { campusLifeSection } from "@/data/home/campusLife";
 import { useCarousel } from "@/hooks/use-carousel";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 import type { MomentView } from "@/types/sections";
 import { CarouselControls } from "./CarouselControls";
 import { SectionHeading } from "./SectionHeading";
@@ -60,11 +61,19 @@ export function CampusLifeSection({ moments }: { moments: MomentView[] }) {
               <div className="relative aspect-[1.65] w-full" aria-live={carousel.running ? "off" : "polite"}>
                 {frames.map((frame, frameIndex) => {
                   const moment = moments[(carousel.index + frameIndex) % total];
+                  // Frame 0 always shows moments[carousel.index] — it's the one the prev/next buttons
+                  // are actually driving. Nothing distinguished it from the other four (usability audit
+                  // #37), so it now carries the same accent-ring treatment used for "current" elsewhere
+                  // on the page (e.g. the celebrity strip).
+                  const isLead = frameIndex === 0;
                   return (
                     <div
                       key={frameIndex}
                       data-anim="frame"
-                      className="absolute rounded-[1.1rem] border-[5px] border-white bg-white shadow-[0_18px_36px_-18px_rgba(23,50,77,0.5)] [container-type:inline-size]"
+                      className={cn(
+                        "absolute rounded-[1.1rem] border-[5px] bg-white shadow-[0_18px_36px_-18px_rgba(23,50,77,0.5)] [container-type:inline-size] transition-colors duration-500",
+                        isLead ? "border-white ring-[3px] ring-eit-accent ring-offset-2 ring-offset-eit-surface" : "border-white",
+                      )}
                       style={{
                         left: `${frame.left}%`,
                         top: `${frame.top}%`,

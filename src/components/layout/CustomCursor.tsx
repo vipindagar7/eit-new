@@ -14,6 +14,19 @@ interface CursorState {
 const INTERACTIVE = "[data-cursor], a, button, [role='button'], summary, label";
 const TEXT_FIELDS = "input, textarea, select, [contenteditable='true']";
 
+/**
+ * EIT cursor for mouse users: a small dot that follows the pointer exactly, and a ring that trails it.
+ * The ring grows over links and buttons, and shows a word ("Drag", "View") over anything marked `data-cursor="Word"`.
+ * Purely decorative: it never captures the pointer, is hidden over text fields (which keep the normal I-beam),
+ * and does not exist on touch screens or for visitors who ask for reduced motion.
+ *
+ * Visibility: earlier this used `mix-blend-mode: difference` to auto-invert against whatever sits behind it.
+ * That only works when nothing between the cursor and the page root starts its own stacking context or
+ * compositing layer — but GSAP's scroll transforms on every section, Framer Motion's transformed elements and
+ * the navbar's `backdrop-blur` all do exactly that, so the cursor silently vanished on most of the site. It now
+ * uses a fixed accent colour with a white-then-navy halo instead, which stays visible against any background —
+ * light, dark or photographic — without depending on blend compositing.
+ */
 export function CustomCursor() {
   const fine = useMediaQuery("(hover: hover) and (pointer: fine)");
   const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");

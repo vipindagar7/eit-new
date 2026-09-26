@@ -1,12 +1,14 @@
 import { ScrollAnimator } from "@/components/animations/ScrollAnimator";
 import { SmartImage, initials } from "@/components/home/SmartImage";
 import { FannedCarousel } from "@/components/pages/FannedCarousel";
+import { HistoryTimeline } from "@/components/pages/HistoryTimeline";
 import { PageHero } from "@/components/pages/PageHero";
 import { PageSection } from "@/components/pages/PageSection";
 import { QuickLinksGrid, type QuickLink } from "@/components/pages/QuickLinksGrid";
+import { SectionNote } from "@/components/pages/SectionNote";
 import { aboutContent } from "@/data/home/about";
 import { getRoutesInGroup } from "@/data/site/routes";
-import { getLeadershipMessages } from "@/lib/content";
+import { getHistory, getLeadershipMessages } from "@/lib/content";
 import { getRouteMetadata } from "@/lib/metadata";
 
 const path = "/about";
@@ -15,6 +17,7 @@ export const metadata = getRouteMetadata(path);
 
 export default function Page() {
   const leadership = getLeadershipMessages();
+  const history = getHistory();
   const links: QuickLink[] = getRoutesInGroup("about", [path]).map((route) => ({ href: route.path, label: route.title }));
 
   return (
@@ -54,6 +57,17 @@ export default function Page() {
           </div>
         </PageSection>
       )}
+
+      <PageSection name="history" bg="parchment" eyebrow="Our journey" title={["2007 to", "the present"]}>
+        {history.length > 0 ? (
+          <HistoryTimeline milestones={history} />
+        ) : (
+          <SectionNote title="The institute's history timeline is being compiled">
+            Key milestones from 2007 to the present will appear here, on this animated timeline, once
+            supplied by the institute.
+          </SectionNote>
+        )}
+      </PageSection>
 
       <PageSection name="default" bg="surface" eyebrow="About EIT" title={["Read more", "about us"]}>
         <QuickLinksGrid links={links} columns={3} />

@@ -43,11 +43,25 @@ import { featuredCelebrityIds } from "@/data/home/celebrities";
 import { episodes } from "@/data/podcasts/episodes";
 import { speakers } from "@/data/podcasts/speakers";
 import { leadershipMessages } from "@/data/about/messages";
+import { history } from "@/data/about/history";
+import { governingBody } from "@/data/about/governance";
+import { approvals } from "@/data/about/approvals";
+import { committees, type CommitteeSlug } from "@/data/about/committees";
+import { mandatoryDisclosure } from "@/data/about/disclosure";
+import { placementMessages, studentsSpeak, recruitersSpeak } from "@/data/placements/testimonials";
+import { placementMous } from "@/data/placements/mous";
+import { placementActivities, type PlacementActivityKind } from "@/data/placements/activities";
+import { placementAchievements } from "@/data/placements/achievements";
+import { documents } from "@/data/site/documents";
+import type { DocumentCategory } from "@/types";
 import {
-  sampleAnnouncements, sampleCelebrities, sampleCentres, sampleClubs, sampleEpisodes, sampleEvents, sampleHighestPerformers,
-  sampleLeadership, sampleMoments, samplePlacementGallery, samplePlacementPolicy, samplePlacementProcess, sampleProjects,
-  sampleRecruiters, sampleSocial, sampleSocieties, sampleSpeakers, sampleStatistics, sampleStories, sampleTestimonials,
+  sampleAnnouncements, sampleApprovals, sampleCelebrities, sampleCentres, sampleClubs, sampleCommittees, sampleEpisodes,
+  sampleEvents, sampleGoverningBody, sampleHighestPerformers, sampleHistory, sampleLeadership, sampleMandatoryDisclosure,
+  sampleMoments, samplePlacementActivities, samplePlacementGallery, samplePlacementMessages, samplePlacementMous,
+  samplePlacementPolicy, samplePlacementProcess, sampleProgramDetails, sampleProjects, sampleRecruiters, sampleRecruitersSpeak,
+  sampleSocial, sampleSocieties, sampleSpeakers, sampleStatistics, sampleStories, sampleStudentsSpeak, sampleTestimonials,
 } from "@/data/samples";
+import type { ProgramDetail, ProgramSlug } from "@/data/programs/programs";
 import { socialLinks } from "@/data/site/social";
 
 /** The EIT pastels, used in turn as accents when a data entry does not name one. */
@@ -63,6 +77,11 @@ function resolveImage(image?: ImageAsset): ResolvedImage | undefined {
 /** Real list, else the sample list when the review flag is on, else empty. */
 function pick<T>(real: T[], sample: T[]): T[] {
   return real.length > 0 ? real : SAMPLE_CONTENT ? sample : [];
+}
+
+/** Real single value, else the sample value when the review flag is on, else null. For one-per-page content (a program's detail, a single committee). */
+function pickOne<T>(real: T | null | undefined, sample: T): T | null {
+  return real ?? (SAMPLE_CONTENT ? sample : null);
 }
 
 /** Applies an optional "featured ids" ordering. An empty id list means keep everything, in data order. */
@@ -273,4 +292,68 @@ export function getProfessionalSocieties() {
     logo: resolveImage(society.logo),
     accent: accentAt(index),
   }));
+}
+
+/** Institutional history milestones (2007–present), for the About page timeline. Sorted by year. */
+export function getHistory() {
+  return [...pick(history, sampleHistory)].sort((a, b) => a.year.localeCompare(b.year));
+}
+
+/** Governing Body members, for the About page. */
+export function getGoverningBody() {
+  return pick(governingBody, sampleGoverningBody).map((member) => ({ ...member, photo: resolveImage(member.photo) }));
+}
+
+/** Approvals & affiliations list (structured entries), for the About page. */
+export function getApprovals() {
+  return pick(approvals, sampleApprovals);
+}
+
+/** A named statutory committee (IQAC, Grievance Redressal, Internal Committee & Women Cell, SC/ST Cell, NBA/NAAC). */
+export function getCommittee(slug: CommitteeSlug) {
+  const real = committees.find((committee) => committee.slug === slug);
+  return pickOne(real, sampleCommittees.find((committee) => committee.slug === slug)!);
+}
+
+/** Mandatory disclosure line items, for the About page. */
+export function getMandatoryDisclosure() {
+  return pick(mandatoryDisclosure, sampleMandatoryDisclosure);
+}
+
+/** Message from the HoD and Training & Placement office. */
+export function getPlacementMessages() {
+  return pick(placementMessages, samplePlacementMessages).map((message) => ({ ...message, photo: resolveImage(message.photo) }));
+}
+
+export function getStudentsSpeak() {
+  return pick(studentsSpeak, sampleStudentsSpeak).map((entry) => ({ ...entry, photo: resolveImage(entry.photo) }));
+}
+
+export function getRecruitersSpeak() {
+  return pick(recruitersSpeak, sampleRecruitersSpeak).map((entry) => ({ ...entry, photo: resolveImage(entry.photo) }));
+}
+
+export function getPlacementMous() {
+  return pick(placementMous, samplePlacementMous).map((mou) => ({ ...mou, logo: resolveImage(mou.logo) }));
+}
+
+export function getPlacementActivities(kind: PlacementActivityKind) {
+  const real = placementActivities.filter((activity) => activity.kind === kind);
+  const source = real.length > 0 ? real : SAMPLE_CONTENT ? samplePlacementActivities.filter((activity) => activity.kind === kind) : [];
+  return source.map((activity) => ({ ...activity, images: activity.images?.map((image) => resolveImage(image)) }));
+}
+
+export function getPlacementAchievements() {
+  return placementAchievements;
+}
+
+/** A program's extended detail (duration, eligibility, specialisations, career paths) for its own page. `real` is that slug's data/programs/<slug>.ts value. */
+export function getProgramDetail(slug: ProgramSlug, real: ProgramDetail | null) {
+  if (real) return real;
+  return SAMPLE_CONTENT ? { ...sampleProgramDetails[slug] } : null;
+}
+
+/** Real, previously-registered documents (PDFs) in a category, e.g. the institute's approval letters. */
+export function getDocumentsByCategory(category: DocumentCategory) {
+  return documents.filter((document) => document.category === category);
 }

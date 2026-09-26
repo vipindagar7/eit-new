@@ -2,12 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SkipToContent } from "@/components/layout/SkipToContent";
-import { SocialLinks } from "@/components/layout/SocialLinks";
 import { CustomCursor } from "@/components/layout/CustomCursor";
 import { PageCurlTransition } from "@/components/layout/PageCurlTransition";
 import { siteConfig } from "@/data/site/site";
 import { ALLOW_INDEXING, BRAND_COLOR, DEFAULT_TITLE, SITE_URL, TITLE_TEMPLATE } from "@/lib/constants";
-import { getSocialLinks } from "@/lib/content";
 import { fontSans, fontScript } from "@/lib/fonts";
 import "./globals.css";
 
@@ -44,11 +42,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${fontSans.variable} ${fontScript.variable}`} suppressHydrationWarning>
       <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
+        {/*
+         * A fixed, top-1/2-right-2 social "rail" used to live here on every page. It's removed per
+         * usability audit #26/#27: as a page-wide fixed element it sat near the scrollbar (risking
+         * accidental interaction while scrolling) and, on the homepage specifically, its light glass
+         * pill competed with the hero's "Apply Now" CTA for attention right where a first-time visitor's
+         * eye lands. The same links are already reachable from the footer and the mobile menu
+         * (SocialLinks variant="row"), so nothing is lost — just one redundant, more intrusive copy.
+         */}
         <SkipToContent />
         <CustomCursor />
         <PageCurlTransition />
         <SiteHeader />
-        <SocialLinks links={getSocialLinks()} variant="rail" />
         <main id="main-content" className="flex flex-1 flex-col">
           {children}
         </main>

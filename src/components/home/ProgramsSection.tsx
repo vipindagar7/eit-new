@@ -84,11 +84,7 @@ export function ProgramsSection({ programs }: { programs: ResolvedProgram[] }) {
           </div>
 
           <div className="min-w-0">
-            <div className="hidden items-start justify-between gap-10 lg:flex">
-              <p className="max-w-xs text-[0.9375rem] leading-relaxed text-muted-foreground">{intro}</p>
-              {controls}
-            </div>
-            <p className="max-w-md text-[0.9375rem] leading-relaxed text-muted-foreground lg:hidden">{intro}</p>
+            <p className="max-w-xs text-[0.9375rem] leading-relaxed text-muted-foreground lg:max-w-sm">{intro}</p>
 
             {/* Stage: perspective container. Cards anchor at one point and fan out from it. */}
             <motion.div
@@ -115,7 +111,10 @@ export function ProgramsSection({ programs }: { programs: ResolvedProgram[] }) {
               </div>
             </motion.div>
 
-            <div className="mt-2 flex justify-center lg:hidden">{controls}</div>
+            {/* Previously sat in a top row, well above and detached from the card stack it drives
+                (usability audit #29). It now sits directly under the stage on every breakpoint, so the
+                prev/next/pause buttons are physically adjacent to the cards they control. */}
+            <div className="mt-4 flex justify-center lg:justify-end">{controls}</div>
           </div>
         </div>
 

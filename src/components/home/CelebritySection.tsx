@@ -102,7 +102,17 @@ export function CelebritySection({ people }: { people: CelebrityView[] }) {
               >
                 {current.category && <p className="mb-2 text-xs font-bold tracking-[0.2em] text-eit-accent uppercase">{current.category}</p>}
                 <p className="text-sm text-white/85 italic sm:text-base">{current.role}</p>
-                <h3 className="mt-1 text-[clamp(1.75rem,5.4vw,4.5rem)] leading-[1.02] font-light tracking-[0.05em] uppercase">{current.name}</h3>
+                {/* Long, all-caps names (e.g. "Sample Celebrity One") are slower to read than sentence
+                    case (usability audit #17). Uppercase is now reserved for genuinely short names;
+                    longer ones keep their natural case at the same size and weight. */}
+                <h3
+                  className={cn(
+                    "mt-1 text-[clamp(1.75rem,5.4vw,4.5rem)] leading-[1.02] font-light tracking-[0.05em]",
+                    current.name.length <= 14 && "uppercase",
+                  )}
+                >
+                  {current.name}
+                </h3>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -146,8 +156,13 @@ export function CelebritySection({ people }: { people: CelebrityView[] }) {
                         aria-label={`Show ${person.name}`}
                         aria-current={isActive ? "true" : undefined}
                         className={cn(
+                          // The active thumbnail's own base size never changes — only its scale/ring
+                          // shift with selection, and this active one just happens to default to index 0
+                          // (usability audit #35 read that starting state as a fixed, oversized "first"
+                          // thumbnail). The scale delta is softened here so the active item still reads
+                          // clearly without breaking the row's rhythm as much.
                           "relative block h-24 w-[4.25rem] overflow-hidden rounded-md transition-all duration-500 [container-type:inline-size] sm:h-32 sm:w-24 lg:h-36 lg:w-28",
-                          isActive ? "scale-100 ring-2 ring-white" : "scale-[0.92] opacity-70 hover:opacity-100",
+                          isActive ? "scale-100 ring-2 ring-white" : "scale-[0.95] opacity-70 hover:opacity-100",
                         )}
                       >
                         <SmartImage image={person.photo} accent={person.accent} label={initials(person.name)} sizes="120px" />

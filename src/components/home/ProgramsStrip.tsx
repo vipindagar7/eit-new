@@ -29,8 +29,23 @@ export function ProgramsStrip({ programs, active, onSelect, allHref, allLabel }:
                 type="button"
                 onClick={() => onSelect(index)}
                 aria-current={isActive ? "true" : undefined}
-                className="group flex w-full items-center gap-4 px-5 py-2 text-left first:pl-0 2xl:px-6 2xl:first:pl-0"
+                className={cn(
+                  // `first:` here used to be scoped to this <button> — which is always the sole/first
+                  // child of its own <li> — so `first:pl-0` was firing for every item, not just the
+                  // first one, quietly shrinking every gap in the strip (part of what threw off the
+                  // row's right-edge alignment in usability audit #31). Using `index` directly targets
+                  // only the actual first item, restoring the intended padding on every other one.
+                  "group relative flex w-full items-center gap-4 py-2 text-left",
+                  index === 0 ? "pl-0 pr-5 2xl:pr-6" : "px-5 2xl:px-6",
+                )}
               >
+                {/* Active-state indicator: the icon chip alone (below) read as "visually identical" at a
+                    glance (usability audit #25). A full-width accent underline gives the featured
+                    program unambiguous wayfinding feedback, independent of icon color. */}
+                <span
+                  aria-hidden
+                  className={cn("absolute inset-x-0 -bottom-px h-0.5 rounded-full transition-colors", isActive ? "bg-primary" : "bg-transparent")}
+                />
                 <span
                   className={cn(
                     "grid size-12 shrink-0 place-items-center rounded-xl border transition-colors",
@@ -42,7 +57,7 @@ export function ProgramsStrip({ programs, active, onSelect, allHref, allLabel }:
                   <Icon aria-hidden className="size-6" />
                 </span>
                 <span>
-                  <span className="block font-semibold text-primary">{program.name}</span>
+                  <span className={cn("block font-semibold transition-colors", isActive ? "text-primary" : "text-primary/70")}>{program.name}</span>
                   <span className="block whitespace-nowrap text-sm text-muted-foreground">{program.category}</span>
                 </span>
               </button>
